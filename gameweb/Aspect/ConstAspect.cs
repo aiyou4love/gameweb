@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 
@@ -7,7 +8,7 @@ namespace gameweb
 {
     public class ConstAspect
     {
-        public static string mConnectionString = @"server=LENGAI\UNSEEN;database=accountDb;user=sa;pwd=zyh";
+        public static string mConnectionString = ConfigurationManager.ConnectionStrings["dbconstr"].ToString();
 
         public static int mSucess = 1;
 
