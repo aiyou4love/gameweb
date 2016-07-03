@@ -90,6 +90,8 @@ namespace gameweb.Controllers
         [HttpPost]
         public HttpResponseMessage accountRegister([FromBody]RegisterRequest nRegisterRequest)
         {
+            if (AccountAspect.accountCheck(nRegisterRequest.mAccountName)) return toJson(false);
+
             return toJson(AccountAspect.accountRegister(nRegisterRequest.mAccountName, nRegisterRequest.mAccountPassword, 1));
         }
 
