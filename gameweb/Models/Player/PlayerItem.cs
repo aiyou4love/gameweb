@@ -12,6 +12,7 @@ namespace gameweb
         public short mPlayerType { get; set; }
         public string mPlayerName { get; set; }
         public short mPlayerRace { get; set; }
+        public short mPlayerStep { get; set; }
         public int mPlayerLevel { get; set; }
     }
 }

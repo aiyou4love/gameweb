@@ -43,6 +43,7 @@ namespace gameweb.Controllers
                 playerResult_.mPlayerItem.mServerId = nPlayerRequest.mServerId;
                 playerResult_.mPlayerItem.mPlayerName = nPlayerRequest.mPlayerName;
                 playerResult_.mPlayerItem.mPlayerRace = nPlayerRequest.mPlayerRace;
+                playerResult_.mPlayerItem.mPlayerStep = 1;
                 playerResult_.mPlayerItem.mPlayerLevel = 1;
                 playerResult_.mPlayerItem.mPlayerType = 1;
                 playerResult_.mServerItem = ServerAspect.getServerItem(nPlayerRequest.mOperatorName, nPlayerRequest.mVersionNo, nPlayerRequest.mServerId);

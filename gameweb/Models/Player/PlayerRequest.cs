@@ -16,6 +16,7 @@ namespace gameweb
         public int mServerId { get; set; }
         public string mPlayerName { get; set; }
         public short mPlayerRace { get; set; }
+        public short mPlayerStep { get; set; }
         public bool mUpdate { get; set; }
     }
 }

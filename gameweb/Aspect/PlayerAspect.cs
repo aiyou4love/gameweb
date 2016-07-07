@@ -9,7 +9,7 @@ namespace gameweb
 {
     public class PlayerAspect
     {
-        static string mCreatePlayer = "INSERT INTO t_playerList(operatorName,accountId,serverId,playerId,playerName,playerRace,playerType,playerLevel)VALUES('{0}','{1}','{2}','{3}','{4}','{5}','1','1');";
+        static string mCreatePlayer = "INSERT INTO t_playerList(operatorName,accountId,serverId,playerId,playerName,playerRace,playerType,playerStep,playerLevel)VALUES('{0}','{1}','{2}','{3}','{4}','{5}','1','1','1');";
         public static bool createPlayer(string nOperatorName, int nVersionNo, long nAccountId, int nServerId, string nPlayerName, short nPlayerRace)
         {
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
@@ -124,7 +124,7 @@ namespace gameweb
             return result_;
         }
 
-        static string mPlayerInfo = "SELECT playerType,playerName,playerRace,playerLevel FROM t_playerList WHERE operatorName='{0}' AND accountId='{1}' AND playerId='{2}' AND serverId='{3}';";
+        static string mPlayerInfo = "SELECT playerType,playerName,playerRace,playerStep,playerLevel FROM t_playerList WHERE operatorName='{0}' AND accountId='{1}' AND playerId='{2}' AND serverId='{3}';";
         public static PlayerItem getPlayerInfo(string nOperatorName, int nVersionNo, long nAccountId, int nPlayerId, int nServerId)
         {
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
@@ -150,7 +150,8 @@ namespace gameweb
                 playerItem_.mPlayerType = sqlDataReader_.GetInt16(0);
                 playerItem_.mPlayerName = sqlDataReader_.GetString(1).Trim();
                 playerItem_.mPlayerRace = sqlDataReader_.GetInt16(2);
-                playerItem_.mPlayerLevel = sqlDataReader_.GetInt32(3);
+                playerItem_.mPlayerStep = sqlDataReader_.GetInt16(3);
+                playerItem_.mPlayerLevel = sqlDataReader_.GetInt32(4);
             }
             sqlDataReader_.Close();
             sqlConnection_.Close();
@@ -185,7 +186,7 @@ namespace gameweb
             return playerStartInfo_;
         }
 
-        static string mPlayerList = "SELECT serverId,playerId,playerType,playerName,playerRace,playerLevel FROM t_playerList WHERE operatorName='{0}' AND accountId='{1}';";
+        static string mPlayerList = "SELECT serverId,playerId,playerType,playerName,playerRace,playerStep,playerLevel FROM t_playerList WHERE operatorName='{0}' AND accountId='{1}';";
         public static List<PlayerItem> getPlayerList(string nOperatorName, int nVersionNo, long nAccountId)
         {
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
@@ -215,7 +216,8 @@ namespace gameweb
                 playerItem_.mPlayerType = sqlDataReader_.GetInt16(2);
                 playerItem_.mPlayerName = sqlDataReader_.GetString(3).Trim();
                 playerItem_.mPlayerRace = sqlDataReader_.GetInt16(4);
-                playerItem_.mPlayerLevel = sqlDataReader_.GetInt32(5);
+                playerItem_.mPlayerStep = sqlDataReader_.GetInt16(5);
+                playerItem_.mPlayerLevel = sqlDataReader_.GetInt32(6);
                 playerItems_.Add(playerItem_);
             }
             sqlDataReader_.Close();
