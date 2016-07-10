@@ -13,7 +13,7 @@ namespace gameweb.Controllers
     {
         //http://localhost:8313/api/values/accountEnter
         //content-type: application/json;charset=utf-8
-        //{"mAccountName": "zyh", "mAccountPassword": "123456", "mAgentName": "iosfigus", "mVersionNo": "1","mAccountId": "1", "mServerId": "1", "mPlayerId": "1", "mStart": "true"}
+        //{"mAccountName": "zyh", "mAccountPassword": "123456", "mAgentName": "iosfigus", "mVersionNo": "1","mAccountId": "1", "mServerId": "1", "mRoleId": "1", "mStart": "true"}
         [HttpPost]
         public HttpResponseMessage accountEnter([FromBody]EnterRequest nEnterRequest)
         {
@@ -22,23 +22,23 @@ namespace gameweb.Controllers
             enterResult_.mSessionId = nEnterRequest.mSessionId;
             enterResult_.mErrorCode = ConstAspect.mFail;
             enterResult_.mAccountId = accountId_;
-            enterResult_.mPlayerItem = null;
+            enterResult_.mRoleItem = null;
             if ( (accountId_ <= 0) || (accountId_ != nEnterRequest.mAccountId) )
             {
                 enterResult_.mErrorCode = ConstAspect.mAccount;
                 return toJson(enterResult_);
             }
-            PlayerItem playerItem_ = PlayerAspect.getPlayerInfo(nEnterRequest.mOperatorName, nEnterRequest.mVersionNo, nEnterRequest.mAccountId, nEnterRequest.mPlayerId, nEnterRequest.mServerId);
-            if (null == playerItem_)
+            RoleItem roleItem_ = RoleAspect.getRoleInfo(nEnterRequest.mOperatorName, nEnterRequest.mVersionNo, nEnterRequest.mAccountId, nEnterRequest.mRoleId, nEnterRequest.mServerId);
+            if (null == roleItem_)
             {
-                enterResult_.mErrorCode = ConstAspect.mPlayer;
+                enterResult_.mErrorCode = ConstAspect.mRole;
                 return toJson(enterResult_);
             }
             enterResult_.mErrorCode = ConstAspect.mSucess;
-            enterResult_.mPlayerItem = playerItem_;
+            enterResult_.mRoleItem = roleItem_;
             if (nEnterRequest.mStart)
             {
-                PlayerAspect.updatePlayerStart(nEnterRequest.mOperatorName, nEnterRequest.mVersionNo, nEnterRequest.mAccountId, nEnterRequest.mServerId, nEnterRequest.mPlayerId);
+                RoleAspect.updateRoleStart(nEnterRequest.mOperatorName, nEnterRequest.mVersionNo, nEnterRequest.mAccountId, nEnterRequest.mServerId, nEnterRequest.mRoleId);
             }
             return toJson(enterResult_);
         }
@@ -52,16 +52,16 @@ namespace gameweb.Controllers
             long accountId_ = AccountAspect.getAccountId(nLoginRequest.mAccountName, nLoginRequest.mPassword, nLoginRequest.mAccountType);
             LoginResult loginResult_ = new LoginResult();
             loginResult_.mAccountId = accountId_;
-            loginResult_.mPlayerItem = null;
+            loginResult_.mRoleItem = null;
             loginResult_.mServerItem = null;
             if (accountId_ > 0)
             {
                 int serverId_ = 0;
-                PlayerStart playerStart_ = PlayerAspect.getPlayerStart(nLoginRequest.mOperatorName, nLoginRequest.mVersionNo, accountId_);
-                if (null != playerStart_)
+                RoleStart roleStart_ = RoleAspect.getRoleStart(nLoginRequest.mOperatorName, nLoginRequest.mVersionNo, accountId_);
+                if (null != roleStart_)
                 {
-                    loginResult_.mPlayerItem = PlayerAspect.getPlayerInfo(nLoginRequest.mOperatorName, nLoginRequest.mVersionNo, accountId_, playerStart_.mPlayerId, playerStart_.mServerId);
-                    serverId_ = playerStart_.mServerId;
+                    loginResult_.mRoleItem = RoleAspect.getRoleInfo(nLoginRequest.mOperatorName, nLoginRequest.mVersionNo, accountId_, roleStart_.mRoleId, roleStart_.mServerId);
+                    serverId_ = roleStart_.mServerId;
                 }
                 else
                 {
@@ -79,7 +79,7 @@ namespace gameweb.Controllers
         public HttpResponseMessage getServerList([FromBody]ServerRequest nServerRequest)
         {
             ServerResult serverResult_ = new ServerResult();
-            serverResult_.mPlayerList = PlayerAspect.getPlayerList(nServerRequest.mOperatorName, nServerRequest.mVersionNo, nServerRequest.mAccountId);
+            serverResult_.mRoleList = RoleAspect.getRoleList(nServerRequest.mOperatorName, nServerRequest.mVersionNo, nServerRequest.mAccountId);
             serverResult_.mServerList = ServerAspect.getServerList(nServerRequest.mOperatorName, nServerRequest.mVersionNo);
             return toJson(serverResult_);
         }

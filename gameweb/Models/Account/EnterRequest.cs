@@ -14,7 +14,7 @@ namespace gameweb
         public string mOperatorName { get; set; }
         public int mVersionNo { get; set; }
         public long mAccountId { get; set; }
-        public int mPlayerId { get; set; }
+        public int mRoleId { get; set; }
         public int mServerId { get; set; }
         public bool mStart { get; set; }
     }

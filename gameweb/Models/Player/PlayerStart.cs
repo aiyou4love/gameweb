@@ -5,9 +5,9 @@ using System.Web;
 
 namespace gameweb
 {
-    public class PlayerStart
+    public class RoleStart
     {
         public int mServerId { get; set; }
-        public int mPlayerId { get; set; }
+        public int mRoleId { get; set; }
     }
 }

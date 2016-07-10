@@ -18,7 +18,7 @@ namespace gameweb
 
         public static int mSql = 4;
 
-        public static int mPlayer = 5;
+        public static int mRole = 5;
 
         public static int mAccount = 6;
 

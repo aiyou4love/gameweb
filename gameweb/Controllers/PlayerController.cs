@@ -9,58 +9,58 @@ using Newtonsoft.Json;
 
 namespace gameweb.Controllers
 {
-    public class PlayerController : ApiController
+    public class RoleController : ApiController
     {
-        //http://localhost:8313/api/values/createPlayer
+        //http://localhost:8313/api/values/createRole
         //content-type: application/json;charset=utf-8
-        //{"mAccountName": "zyh", "mAccountPassword": "123456", "mAgentName": "iosfigus", "mVersionNo": "1","mAccountId": "1", "mServerId": "1", "mPlayerName": "赵由华", "nPlayerRace": "1", "nUpdate": "true"}
+        //{"mAccountName": "zyh", "mAccountPassword": "123456", "mAgentName": "iosfigus", "mVersionNo": "1","mAccountId": "1", "mServerId": "1", "mRoleName": "赵由华", "nRoleRace": "1", "nUpdate": "true"}
         [HttpPost]
-        public HttpResponseMessage createPlayer([FromBody]PlayerRequest nPlayerRequest)
+        public HttpResponseMessage createRole([FromBody]RoleRequest nRoleRequest)
         {
-            long accountId_ = AccountAspect.getAccountId(nPlayerRequest.mAccountName, nPlayerRequest.mPassword, nPlayerRequest.mAccountType);
-            PlayerResult playerResult_ = new PlayerResult();
-            playerResult_.mErrorCode = ConstAspect.mFail;
-            playerResult_.mAccountId = accountId_;
-            playerResult_.mPlayerItem = null;
-            playerResult_.mServerItem = null;
-            if ((0 == accountId_) || (nPlayerRequest.mAccountId != accountId_))
+            long accountId_ = AccountAspect.getAccountId(nRoleRequest.mAccountName, nRoleRequest.mPassword, nRoleRequest.mAccountType);
+            RoleResult roleResult_ = new RoleResult();
+            roleResult_.mErrorCode = ConstAspect.mFail;
+            roleResult_.mAccountId = accountId_;
+            roleResult_.mRoleItem = null;
+            roleResult_.mServerItem = null;
+            if ((0 == accountId_) || (nRoleRequest.mAccountId != accountId_))
             {
-                playerResult_.mErrorCode = ConstAspect.mAccount;
-                return toJson(playerResult_);
+                roleResult_.mErrorCode = ConstAspect.mAccount;
+                return toJson(roleResult_);
             }
-            int playerCount_ = PlayerAspect.getPlayerCount(nPlayerRequest.mOperatorName, nPlayerRequest.mVersionNo, accountId_, nPlayerRequest.mServerId);
-            if (playerCount_ > 0)
+            int roleCount_ = RoleAspect.getRoleCount(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, accountId_, nRoleRequest.mServerId);
+            if (roleCount_ > 0)
             {
-                playerResult_.mErrorCode = ConstAspect.mPlayer;
-                return toJson(playerResult_);
+                roleResult_.mErrorCode = ConstAspect.mRole;
+                return toJson(roleResult_);
             }
-            if (PlayerAspect.createPlayer(nPlayerRequest.mOperatorName, nPlayerRequest.mVersionNo, accountId_, nPlayerRequest.mServerId, nPlayerRequest.mPlayerName, nPlayerRequest.mPlayerRace))
+            if (RoleAspect.createRole(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, accountId_, nRoleRequest.mServerId, nRoleRequest.mRoleName, nRoleRequest.mRoleRace))
             {
-                playerResult_.mErrorCode = ConstAspect.mSucess;
-                playerResult_.mAccountId = accountId_;
-                playerResult_.mPlayerItem = new PlayerItem();
-                playerResult_.mPlayerItem.mPlayerId = nPlayerRequest.mServerId;
-                playerResult_.mPlayerItem.mServerId = nPlayerRequest.mServerId;
-                playerResult_.mPlayerItem.mPlayerName = nPlayerRequest.mPlayerName;
-                playerResult_.mPlayerItem.mPlayerRace = nPlayerRequest.mPlayerRace;
-                playerResult_.mPlayerItem.mPlayerStep = 1;
-                playerResult_.mPlayerItem.mPlayerLevel = 1;
-                playerResult_.mPlayerItem.mPlayerType = 1;
-                playerResult_.mServerItem = ServerAspect.getServerItem(nPlayerRequest.mOperatorName, nPlayerRequest.mVersionNo, nPlayerRequest.mServerId);
-            }
-            else
-            {
-                playerResult_.mErrorCode = ConstAspect.mCreate;
-            }
-            if (nPlayerRequest.mUpdate)
-            {
-                PlayerAspect.updatePlayerStart(nPlayerRequest.mOperatorName, nPlayerRequest.mVersionNo, accountId_, nPlayerRequest.mServerId, nPlayerRequest.mServerId);
+                roleResult_.mErrorCode = ConstAspect.mSucess;
+                roleResult_.mAccountId = accountId_;
+                roleResult_.mRoleItem = new RoleItem();
+                roleResult_.mRoleItem.mRoleId = nRoleRequest.mServerId;
+                roleResult_.mRoleItem.mServerId = nRoleRequest.mServerId;
+                roleResult_.mRoleItem.mRoleName = nRoleRequest.mRoleName;
+                roleResult_.mRoleItem.mRoleRace = nRoleRequest.mRoleRace;
+                roleResult_.mRoleItem.mRoleStep = 1;
+                roleResult_.mRoleItem.mRoleLevel = 1;
+                roleResult_.mRoleItem.mRoleType = 1;
+                roleResult_.mServerItem = ServerAspect.getServerItem(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, nRoleRequest.mServerId);
             }
             else
             {
-                PlayerAspect.insertPlayerStart(nPlayerRequest.mOperatorName, nPlayerRequest.mVersionNo, accountId_, nPlayerRequest.mServerId, nPlayerRequest.mServerId);
+                roleResult_.mErrorCode = ConstAspect.mCreate;
             }
-            return toJson(nPlayerRequest);
+            if (nRoleRequest.mUpdate)
+            {
+                RoleAspect.updateRoleStart(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, accountId_, nRoleRequest.mServerId, nRoleRequest.mServerId);
+            }
+            else
+            {
+                RoleAspect.insertRoleStart(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, accountId_, nRoleRequest.mServerId, nRoleRequest.mServerId);
+            }
+            return toJson(nRoleRequest);
         }
 
         HttpResponseMessage toJson(Object nObject)

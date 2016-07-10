@@ -7,10 +7,10 @@ using System.Web;
 
 namespace gameweb
 {
-    public class PlayerAspect
+    public class RoleAspect
     {
-        static string mCreatePlayer = "INSERT INTO t_playerList(operatorName,accountId,serverId,playerId,playerName,playerRace,playerType,playerStep,playerLevel)VALUES('{0}','{1}','{2}','{3}','{4}','{5}','1','1','1');";
-        public static bool createPlayer(string nOperatorName, int nVersionNo, long nAccountId, int nServerId, string nPlayerName, short nPlayerRace)
+        static string mCreateRole = "INSERT INTO t_roleList(operatorName,accountId,serverId,roleId,roleName,roleRace,roleType,roleStep,roleLevel)VALUES('{0}','{1}','{2}','{3}','{4}','{5}','1','1','1');";
+        public static bool createRole(string nOperatorName, int nVersionNo, long nAccountId, int nServerId, string nRoleName, short nRoleRace)
         {
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
             if ("" == operatorName_) return false;
@@ -23,7 +23,7 @@ namespace gameweb
             SqlCommand sqlCommand_ = new SqlCommand();
             sqlCommand_.Connection = sqlConnection_;
             sqlCommand_.CommandType = CommandType.Text;
-            sqlCommand_.CommandText = string.Format(mCreatePlayer, operatorName_, nAccountId, nServerId, nServerId, nPlayerName, nPlayerRace);
+            sqlCommand_.CommandText = string.Format(mCreateRole, operatorName_, nAccountId, nServerId, nServerId, nRoleName, nRoleRace);
             bool result_ = false;
             try
             {
@@ -38,8 +38,8 @@ namespace gameweb
             return result_;
         }
 
-        static string mPlayerCount = "SELECT COUNT(*) FROM t_playerList WHERE operatorName='{0}' AND accountId='{1}' AND serverId='{2}';";
-        public static int getPlayerCount(string nOperatorName, int nVersionNo, long nAccountId, int nServerId)
+        static string mRoleCount = "SELECT COUNT(*) FROM t_roleList WHERE operatorName='{0}' AND accountId='{1}' AND serverId='{2}';";
+        public static int getRoleCount(string nOperatorName, int nVersionNo, long nAccountId, int nServerId)
         {
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
             if ("" == operatorName_) return 0;
@@ -52,20 +52,20 @@ namespace gameweb
             SqlCommand sqlCommand_ = new SqlCommand();
             sqlCommand_.Connection = sqlConnection_;
             sqlCommand_.CommandType = CommandType.Text;
-            sqlCommand_.CommandText = string.Format(mPlayerCount, operatorName_, nAccountId, nServerId);
+            sqlCommand_.CommandText = string.Format(mRoleCount, operatorName_, nAccountId, nServerId);
             SqlDataReader sqlDataReader_ = sqlCommand_.ExecuteReader();
-            int playerCount_ = 0;
+            int roleCount_ = 0;
             if (sqlDataReader_.Read())
             {
-                playerCount_ = sqlDataReader_.GetInt32(0);
+                roleCount_ = sqlDataReader_.GetInt32(0);
             }
             sqlDataReader_.Close();
             sqlConnection_.Close();
-            return playerCount_;
+            return roleCount_;
         }
 
-        static string mUpdatePlayerStart = "UPDATE t_playerStart SET serverId='{0}',playerId='{1}' WHERE operatorName='{2}' AND accountId='{3}';";
-        public static int updatePlayerStart(string nOperatorName, int nVersionNo, long nAccountId, int nServerId, int nPlayerId)
+        static string mUpdateRoleStart = "UPDATE t_roleStart SET serverId='{0}',roleId='{1}' WHERE operatorName='{2}' AND accountId='{3}';";
+        public static int updateRoleStart(string nOperatorName, int nVersionNo, long nAccountId, int nServerId, int nRoleId)
         {
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
             if ("" == operatorName_) return ConstAspect.mOperator;
@@ -80,7 +80,7 @@ namespace gameweb
             SqlCommand sqlCommand_ = new SqlCommand();
             sqlCommand_.Connection = sqlConnection_;
             sqlCommand_.CommandType = CommandType.Text;
-            sqlCommand_.CommandText = string.Format(mUpdatePlayerStart, nServerId, nPlayerId, operatorName_, nAccountId);
+            sqlCommand_.CommandText = string.Format(mUpdateRoleStart, nServerId, nRoleId, operatorName_, nAccountId);
             try
             {
                 sqlCommand_.ExecuteNonQuery();
@@ -94,8 +94,8 @@ namespace gameweb
             return result_;
         }
 
-        static string mInsertPlayerStart = "INSERT INTO t_playerStart(operatorName,accountId,serverId,playerId) VALUES ('{0}','{1}','{2}','{3}');";
-        public static int insertPlayerStart(string nOperatorName, int nVersionNo, long nAccountId, int nServerId, int nPlayerId)
+        static string mInsertRoleStart = "INSERT INTO t_roleStart(operatorName,accountId,serverId,roleId) VALUES ('{0}','{1}','{2}','{3}');";
+        public static int insertRoleStart(string nOperatorName, int nVersionNo, long nAccountId, int nServerId, int nRoleId)
         {
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
             if ("" == operatorName_) return ConstAspect.mOperator;
@@ -110,7 +110,7 @@ namespace gameweb
             SqlCommand sqlCommand_ = new SqlCommand();
             sqlCommand_.Connection = sqlConnection_;
             sqlCommand_.CommandType = CommandType.Text;
-            sqlCommand_.CommandText = string.Format(mInsertPlayerStart, operatorName_, nAccountId, nServerId, nPlayerId);
+            sqlCommand_.CommandText = string.Format(mInsertRoleStart, operatorName_, nAccountId, nServerId, nRoleId);
             try
             {
                 sqlCommand_.ExecuteNonQuery();
@@ -124,13 +124,13 @@ namespace gameweb
             return result_;
         }
 
-        static string mPlayerInfo = "SELECT playerType,playerName,playerRace,playerStep,playerLevel FROM t_playerList WHERE operatorName='{0}' AND accountId='{1}' AND playerId='{2}' AND serverId='{3}';";
-        public static PlayerItem getPlayerInfo(string nOperatorName, int nVersionNo, long nAccountId, int nPlayerId, int nServerId)
+        static string mRoleInfo = "SELECT roleType,roleName,roleRace,roleStep,roleLevel FROM t_roleList WHERE operatorName='{0}' AND accountId='{1}' AND roleId='{2}' AND serverId='{3}';";
+        public static RoleItem getRoleInfo(string nOperatorName, int nVersionNo, long nAccountId, int nRoleId, int nServerId)
         {
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
             if ("" == operatorName_) return null;
 
-            PlayerItem playerItem_ = null;
+            RoleItem roleItem_ = null;
 
             SqlConnection sqlConnection_ = new SqlConnection();
 
@@ -140,26 +140,26 @@ namespace gameweb
             SqlCommand sqlCommand_ = new SqlCommand();
             sqlCommand_.Connection = sqlConnection_;
             sqlCommand_.CommandType = CommandType.Text;
-            sqlCommand_.CommandText = string.Format(mPlayerInfo, operatorName_, nAccountId, nPlayerId, nServerId);
+            sqlCommand_.CommandText = string.Format(mRoleInfo, operatorName_, nAccountId, nRoleId, nServerId);
             SqlDataReader sqlDataReader_ = sqlCommand_.ExecuteReader();
             if (sqlDataReader_.Read())
             {
-                playerItem_ = new PlayerItem();
-                playerItem_.mServerId = nServerId;
-                playerItem_.mPlayerId = nPlayerId;
-                playerItem_.mPlayerType = sqlDataReader_.GetInt16(0);
-                playerItem_.mPlayerName = sqlDataReader_.GetString(1).Trim();
-                playerItem_.mPlayerRace = sqlDataReader_.GetInt16(2);
-                playerItem_.mPlayerStep = sqlDataReader_.GetInt16(3);
-                playerItem_.mPlayerLevel = sqlDataReader_.GetInt32(4);
+                roleItem_ = new RoleItem();
+                roleItem_.mServerId = nServerId;
+                roleItem_.mRoleId = nRoleId;
+                roleItem_.mRoleType = sqlDataReader_.GetInt16(0);
+                roleItem_.mRoleName = sqlDataReader_.GetString(1).Trim();
+                roleItem_.mRoleRace = sqlDataReader_.GetInt16(2);
+                roleItem_.mRoleStep = sqlDataReader_.GetInt16(3);
+                roleItem_.mRoleLevel = sqlDataReader_.GetInt32(4);
             }
             sqlDataReader_.Close();
             sqlConnection_.Close();
-            return playerItem_;
+            return roleItem_;
         }
 
-        static string mPlayerStart = "SELECT serverId,playerId FROM t_playerStart WHERE operatorName='{0}' AND accountId='{1}';";
-        public static PlayerStart getPlayerStart(string nOperatorName, int nVersionNo, long nAccountId)
+        static string mRoleStart = "SELECT serverId,roleId FROM t_roleStart WHERE operatorName='{0}' AND accountId='{1}';";
+        public static RoleStart getRoleStart(string nOperatorName, int nVersionNo, long nAccountId)
         {
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
             if ("" == operatorName_) return null;
@@ -172,27 +172,27 @@ namespace gameweb
             SqlCommand sqlCommand_ = new SqlCommand();
             sqlCommand_.Connection = sqlConnection_;
             sqlCommand_.CommandType = CommandType.Text;
-            sqlCommand_.CommandText = string.Format(mPlayerStart, operatorName_, nAccountId);
+            sqlCommand_.CommandText = string.Format(mRoleStart, operatorName_, nAccountId);
             SqlDataReader sqlDataReader_ = sqlCommand_.ExecuteReader();
-            PlayerStart playerStartInfo_ = null;
+            RoleStart roleStartInfo_ = null;
             if (sqlDataReader_.Read())
             {
-                playerStartInfo_ = new PlayerStart();
-                playerStartInfo_.mServerId = sqlDataReader_.GetInt32(0);
-                playerStartInfo_.mPlayerId = sqlDataReader_.GetInt32(1);
+                roleStartInfo_ = new RoleStart();
+                roleStartInfo_.mServerId = sqlDataReader_.GetInt32(0);
+                roleStartInfo_.mRoleId = sqlDataReader_.GetInt32(1);
             }
             sqlDataReader_.Close();
             sqlConnection_.Close();
-            return playerStartInfo_;
+            return roleStartInfo_;
         }
 
-        static string mPlayerList = "SELECT serverId,playerId,playerType,playerName,playerRace,playerStep,playerLevel FROM t_playerList WHERE operatorName='{0}' AND accountId='{1}';";
-        public static List<PlayerItem> getPlayerList(string nOperatorName, int nVersionNo, long nAccountId)
+        static string mRoleList = "SELECT serverId,roleId,roleType,roleName,roleRace,roleStep,roleLevel FROM t_roleList WHERE operatorName='{0}' AND accountId='{1}';";
+        public static List<RoleItem> getRoleList(string nOperatorName, int nVersionNo, long nAccountId)
         {
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
             if ("" == operatorName_) return null;
 
-            List<PlayerItem> playerItems_ = null;
+            List<RoleItem> roleItems_ = null;
 
             SqlConnection sqlConnection_ = new SqlConnection();
 
@@ -202,27 +202,27 @@ namespace gameweb
             SqlCommand sqlCommand_ = new SqlCommand();
             sqlCommand_.Connection = sqlConnection_;
             sqlCommand_.CommandType = CommandType.Text;
-            sqlCommand_.CommandText = string.Format(mPlayerList, operatorName_, nAccountId);
+            sqlCommand_.CommandText = string.Format(mRoleList, operatorName_, nAccountId);
             SqlDataReader sqlDataReader_ = sqlCommand_.ExecuteReader();
             while (sqlDataReader_.Read())
             {
-                if (null == playerItems_)
+                if (null == roleItems_)
                 {
-                    playerItems_ = new List<PlayerItem>();
+                    roleItems_ = new List<RoleItem>();
                 }
-                PlayerItem playerItem_ = new PlayerItem();
-                playerItem_.mServerId = sqlDataReader_.GetInt32(0);
-                playerItem_.mPlayerId = sqlDataReader_.GetInt32(1);
-                playerItem_.mPlayerType = sqlDataReader_.GetInt16(2);
-                playerItem_.mPlayerName = sqlDataReader_.GetString(3).Trim();
-                playerItem_.mPlayerRace = sqlDataReader_.GetInt16(4);
-                playerItem_.mPlayerStep = sqlDataReader_.GetInt16(5);
-                playerItem_.mPlayerLevel = sqlDataReader_.GetInt32(6);
-                playerItems_.Add(playerItem_);
+                RoleItem roleItem_ = new RoleItem();
+                roleItem_.mServerId = sqlDataReader_.GetInt32(0);
+                roleItem_.mRoleId = sqlDataReader_.GetInt32(1);
+                roleItem_.mRoleType = sqlDataReader_.GetInt16(2);
+                roleItem_.mRoleName = sqlDataReader_.GetString(3).Trim();
+                roleItem_.mRoleRace = sqlDataReader_.GetInt16(4);
+                roleItem_.mRoleStep = sqlDataReader_.GetInt16(5);
+                roleItem_.mRoleLevel = sqlDataReader_.GetInt32(6);
+                roleItems_.Add(roleItem_);
             }
             sqlDataReader_.Close();
             sqlConnection_.Close();
-            return playerItems_;
+            return roleItems_;
         }
     }
 }

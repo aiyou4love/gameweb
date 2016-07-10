@@ -16,7 +16,7 @@ namespace gameweb
         {
             foreach (var i in mAgentInfos)
             {
-                if (i.Value.mPlayerCount < i.Value.mPlayerMax)
+                if (i.Value.mRoleCount < i.Value.mRoleMax)
                 {
                     return i.Value;
                 }
@@ -24,14 +24,14 @@ namespace gameweb
             return null;
         }
 
-        public int getPlayerCount(int nAgentId)
+        public int getRoleCount(int nAgentId)
         {
-            return mAgentInfos[nAgentId].mPlayerCount;
+            return mAgentInfos[nAgentId].mRoleCount;
         }
 
-        public void playerEnter(int nAgentId)
+        public void roleEnter(int nAgentId)
         {
-            mAgentInfos[nAgentId].mPlayerCount++;
+            mAgentInfos[nAgentId].mRoleCount++;
         }
 
         Dictionary<int, AgentInfo> mAgentInfos = new Dictionary<int, AgentInfo>();

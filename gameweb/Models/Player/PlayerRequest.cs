@@ -5,7 +5,7 @@ using System.Web;
 
 namespace gameweb
 {
-    public class PlayerRequest
+    public class RoleRequest
     {
         public string mAccountName { get; set; }
         public string mPassword { get; set; }
@@ -14,9 +14,9 @@ namespace gameweb
         public int mVersionNo { get; set; }
         public long mAccountId { get; set; }
         public int mServerId { get; set; }
-        public string mPlayerName { get; set; }
-        public short mPlayerRace { get; set; }
-        public short mPlayerStep { get; set; }
+        public string mRoleName { get; set; }
+        public short mRoleRace { get; set; }
+        public short mRoleStep { get; set; }
         public bool mUpdate { get; set; }
     }
 }

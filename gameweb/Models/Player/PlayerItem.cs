@@ -5,14 +5,14 @@ using System.Web;
 
 namespace gameweb
 {
-    public class PlayerItem
+    public class RoleItem
     {
         public int mServerId { get; set; }
-        public int mPlayerId { get; set; }
-        public short mPlayerType { get; set; }
-        public string mPlayerName { get; set; }
-        public short mPlayerRace { get; set; }
-        public short mPlayerStep { get; set; }
-        public int mPlayerLevel { get; set; }
+        public int mRoleId { get; set; }
+        public short mRoleType { get; set; }
+        public string mRoleName { get; set; }
+        public short mRoleRace { get; set; }
+        public short mRoleStep { get; set; }
+        public int mRoleLevel { get; set; }
     }
 }

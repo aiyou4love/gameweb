@@ -8,7 +8,7 @@ namespace gameweb
     public class LoginResult
     {
         public long mAccountId { get; set; }
-        public PlayerItem mPlayerItem { get; set; }
+        public RoleItem mRoleItem { get; set; }
         public ServerItem mServerItem { get; set; }
     }
 }

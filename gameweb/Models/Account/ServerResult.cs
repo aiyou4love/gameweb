@@ -7,7 +7,7 @@ namespace gameweb
 {
     public class ServerResult
     {
-        public List<PlayerItem> mPlayerList { get; set; }
+        public List<RoleItem> mRoleList { get; set; }
         public List<ServerItem> mServerList { get; set; }
     }
 }
