@@ -7,23 +7,38 @@ namespace gameweb
 {
     public class ServerState
     {
+        public int getServerId()
+        {
+            return mServerItems.Keys.Max();
+        }
+
+        public List<ServerItem> getServerList()
+        {
+            List<ServerItem> serverItems_ = new List<ServerItem>();
+            foreach (KeyValuePair<int, ServerItem> i in mServerItems)
+            {
+                serverItems_.Add(i.Value);
+            }
+            return serverItems_;
+        }
+
         public void pushServerInfo(int nServerNo, ServerInfo nServerInfo)
         {
             mServerInfos[nServerNo] = nServerInfo;
         }
 
-        public void pushServerNo(int nServerId, int nServerNo)
+        public void pushServerItem(ServerItem nServerItem)
         {
-            mServerNos[nServerId] = nServerNo;
+            mServerItems[nServerItem.mServerId] = nServerItem;
         }
 
         public ServerInfo getServerInfo(int nServerId)
         {
-            if (!mServerNos.ContainsKey(nServerId))
+            if (!mServerItems.ContainsKey(nServerId))
             {
                 return null;
             }
-            int serverNo_ = mServerNos[nServerId];
+            int serverNo_ = mServerItems[nServerId].mServerNo;
             if (!mServerInfos.ContainsKey(serverNo_))
             {
                 return null;
@@ -31,7 +46,16 @@ namespace gameweb
             return mServerInfos[serverNo_];
         }
 
+        public ServerItem getServerItem(int nServerId)
+        {
+            if (!mServerItems.ContainsKey(nServerId))
+            {
+                return null;
+            }
+            return mServerItems[nServerId];
+        }
+
         static Dictionary<int, ServerInfo> mServerInfos = new Dictionary<int, ServerInfo>();
-        static Dictionary<int, int> mServerNos = new Dictionary<int, int>();
+        static Dictionary<int, ServerItem> mServerItems = new Dictionary<int, ServerItem>();
     }
 }

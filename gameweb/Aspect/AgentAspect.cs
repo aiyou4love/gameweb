@@ -11,7 +11,7 @@ namespace gameweb
     {
         public static AgentInfo getIdleAgent(string nOperatorName, int nVersionNo)
         {
-            initAgent();
+            initAgent(false);
 
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
             if ("" == operatorName_) return null;
@@ -20,9 +20,12 @@ namespace gameweb
         }
 
         static string mInitAgent = "SELECT operatorName,agentId,agentIp,agentPort,playerMax,playerCount FROM t_agentList";
-        public static void initAgent()
+        public static void initAgent(bool nReinit)
         {
-            if (mInitAgented) return;
+            if (!nReinit)
+            {
+                if (mInitAgented) return;
+            }
 
             SqlConnection sqlConnection_ = new SqlConnection();
 

@@ -11,9 +11,9 @@ namespace gameweb.Controllers
 {
     public class AgentController : ApiController
     {
-        //http://localhost:8313/api/account/accountServers
+        //http://localhost:8313/api/agent/getIdleAgent
         //content-type: application/json;charset=utf-8
-        //{"mOperatorName": "iosfigus", "mVersionNo": "1", "mAccountId": "1"}
+        //{"mOperatorName": "iosfigus", "mVersionNo": "1", "mServerId": "1"}
         [HttpPost]
         public HttpResponseMessage getIdleAgent([FromBody]AgentRequest nAgentRequest)
         {

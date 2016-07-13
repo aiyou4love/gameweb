@@ -9,99 +9,39 @@ namespace gameweb
 {
     public class ServerAspect
     {
-        static string mServerId = "SELECT MAX(serverId) FROM t_serverList WHERE operatorName='{0}'";
         public static int getServerId(string nOperatorName, int nVersionNo)
         {
+            initServerState(false);
+
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
             if ("" == operatorName_) return 0;
 
-            SqlConnection sqlConnection_ = new SqlConnection();
-
-            sqlConnection_.ConnectionString = ConstAspect.mConnectionString;
-            sqlConnection_.Open();
-
-            SqlCommand sqlCommand_ = new SqlCommand();
-            sqlCommand_.Connection = sqlConnection_;
-            sqlCommand_.CommandType = CommandType.Text;
-            sqlCommand_.CommandText = string.Format(mServerId, operatorName_);
-            SqlDataReader sqlDataReader_ = sqlCommand_.ExecuteReader();
-            int serverId_ = 0;
-            if (sqlDataReader_.Read())
-            {
-                serverId_ = sqlDataReader_.GetInt32(0);
-            }
-            sqlDataReader_.Close();
-            sqlConnection_.Close();
-            return serverId_;
+            return mServerStates[operatorName_].getServerId();
         }
 
-        static string mServerName = "SELECT serverName,serverNo FROM t_serverList WHERE operatorName='{0}' AND serverId='{1}';";
         public static ServerItem getServerItem(string nOperatorName, int nVersionNo, int nServerId)
         {
+            initServerState(false);
+
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
             if ("" == operatorName_) return null;
 
-            SqlConnection sqlConnection_ = new SqlConnection();
-
-            sqlConnection_.ConnectionString = ConstAspect.mConnectionString;
-            sqlConnection_.Open();
-
-            SqlCommand sqlCommand_ = new SqlCommand();
-            sqlCommand_.Connection = sqlConnection_;
-            sqlCommand_.CommandType = CommandType.Text;
-            sqlCommand_.CommandText = string.Format(mServerName, operatorName_, nServerId);
-            SqlDataReader sqlDataReader_ = sqlCommand_.ExecuteReader();
-            ServerItem serverItem_ = null;
-            if (sqlDataReader_.Read())
-            {
-                serverItem_ = new ServerItem();
-                serverItem_.mServerId = nServerId;
-                serverItem_.mServerName = sqlDataReader_.GetString(0).Trim();
-                serverItem_.mServerNo = sqlDataReader_.GetInt32(2);
-            }
-            sqlDataReader_.Close();
-            sqlConnection_.Close();
-            return serverItem_;
+            return mServerStates[operatorName_].getServerItem(nServerId);
         }
 
-        static string mServerList = "SELECT serverId,serverName,serverNo FROM t_serverList WHERE operatorName='{0}';";
         public static List<ServerItem> getServerList(string nOperatorName, int nVersionNo)
         {
+            initServerState(false);
+
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
             if ("" == operatorName_) return null;
 
-            SqlConnection sqlConnection_ = new SqlConnection();
-
-            sqlConnection_.ConnectionString = ConstAspect.mConnectionString;
-            sqlConnection_.Open();
-
-            List<ServerItem> serverItems_ = null;
-
-            SqlCommand sqlCommand_ = new SqlCommand();
-            sqlCommand_.Connection = sqlConnection_;
-            sqlCommand_.CommandType = CommandType.Text;
-            sqlCommand_.CommandText = string.Format(mServerList, operatorName_);
-            SqlDataReader sqlDataReader_ = sqlCommand_.ExecuteReader();
-            while (sqlDataReader_.Read())
-            {
-                if (null == serverItems_)
-                {
-                    serverItems_ = new List<ServerItem>();
-                }
-                ServerItem serverItem_ = new ServerItem();
-                serverItem_.mServerId = sqlDataReader_.GetInt32(0);
-                serverItem_.mServerName = sqlDataReader_.GetString(1).Trim();
-                serverItem_.mServerNo = sqlDataReader_.GetInt32(2);
-                serverItems_.Add(serverItem_);
-            }
-            sqlDataReader_.Close();
-            sqlConnection_.Close();
-            return serverItems_;
+            return mServerStates[operatorName_].getServerList();
         }
 
         public static ServerInfo getServerInfo(string nOperatorName, int nVersionNo, int nServerId)
         {
-            initServerState();
+            initServerState(false);
 
             string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
             if ("" == operatorName_) return null;
@@ -109,8 +49,8 @@ namespace gameweb
             return mServerStates[operatorName_].getServerInfo(nServerId);
         }
 
-        static string mInitServerNos = "SELECT operatorName,serverId,serverNo FROM t_serverList";
-        static void initServerNos()
+        static string mInitServerItems = "SELECT operatorName,serverId,serverNo,serverName FROM t_serverList";
+        static void initServerItems()
         {
             SqlConnection sqlConnection_ = new SqlConnection();
 
@@ -120,19 +60,21 @@ namespace gameweb
             SqlCommand sqlCommand_ = new SqlCommand();
             sqlCommand_.Connection = sqlConnection_;
             sqlCommand_.CommandType = CommandType.Text;
-            sqlCommand_.CommandText = mInitServerNos;
+            sqlCommand_.CommandText = mInitServerItems;
             SqlDataReader sqlDataReader_ = sqlCommand_.ExecuteReader();
             while (sqlDataReader_.Read())
             {
                 string operatorName_ = sqlDataReader_.GetString(0).Trim();
-                int serverId_ = sqlDataReader_.GetInt32(1);
-                int serverNo_ = sqlDataReader_.GetInt32(2);
+                ServerItem serverItem_ = new ServerItem();
+                serverItem_.mServerId = sqlDataReader_.GetInt32(1);
+                serverItem_.mServerNo = sqlDataReader_.GetInt32(2);
+                serverItem_.mServerName = sqlDataReader_.GetString(3).Trim();
                 if (!mServerStates.ContainsKey(operatorName_))
                 {
                     ServerState serverState_ = new ServerState();
                     mServerStates[operatorName_] = serverState_;
                 }
-                mServerStates[operatorName_].pushServerNo(serverId_, serverNo_);
+                mServerStates[operatorName_].pushServerItem(serverItem_);
             }
             sqlDataReader_.Close();
             sqlConnection_.Close();
@@ -156,7 +98,7 @@ namespace gameweb
                 ServerInfo serverInfo_ = new ServerInfo();
                 string operatorName_ = sqlDataReader_.GetString(0).Trim();
                 int serverNo_ = sqlDataReader_.GetInt32(1);
-                string serverStart_ = sqlDataReader_.GetString(1).Trim();
+                string serverStart_ = sqlDataReader_.GetString(2).Trim();
                 serverInfo_.mServerStart = Convert.ToDateTime(serverStart_);
                 if (!mServerStates.ContainsKey(operatorName_))
                 {
@@ -169,11 +111,18 @@ namespace gameweb
             sqlConnection_.Close();
         }
 
-        static void initServerState()
+        static void initServerState(bool nReinit)
         {
-            if (mInitServered) return;
+            if (!nReinit)
+            {
+                if (mInitServered) return;
+            }
+            else
+            {
+                mServerStates.Clear();
+            }
 
-            initServerNos();
+            initServerItems();
             initServerInfo();
 
             mInitServered = true;

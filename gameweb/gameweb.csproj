@@ -160,7 +160,7 @@
     <Compile Include="Aspect\AgentAspect.cs" />
     <Compile Include="Aspect\ConstAspect.cs" />
     <Compile Include="Aspect\OperatorAspect.cs" />
-    <Compile Include="Aspect\PlayerAspect.cs" />
+    <Compile Include="Aspect\RoleAspect.cs" />
     <Compile Include="Aspect\ServerAspect.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AgentController.cs" />

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace gameweb
 {
@@ -11,7 +8,7 @@ namespace gameweb
     {
         public static string getOperator(string nOperatorName, int nVersionNo)
         {
-            initOperator();
+            initOperator(false);
 
             foreach (OperatorInfo i in mOperatorInfos)
             {
@@ -24,9 +21,16 @@ namespace gameweb
         }
 
         static string mInitOperator = @"SELECT operatorKey,versionNo,operatorName FROM t_operatorName;";
-        static void initOperator()
+        static void initOperator(bool nReinit)
         {
-            if (mInitOperatored) return;
+            if (!nReinit)
+            {
+                if (mInitOperatored) return;
+            }
+            else
+            {
+                mOperatorInfos.Clear();
+            }
 
             SqlConnection sqlConnection_ = new SqlConnection();
 
