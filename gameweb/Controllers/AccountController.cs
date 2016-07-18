@@ -95,9 +95,9 @@ namespace gameweb.Controllers
             return toJson(AccountAspect.accountRegister(nRegisterRequest.mAccountName, nRegisterRequest.mAccountPassword, 1));
         }
 
-        //http://localhost:8313/api/account/accountCheck/?nAccountName=zyh
+        //http://localhost:8313/api/account/accountCheck
         [HttpGet]
-        public HttpResponseMessage accountCheck(string nAccountName)
+        public HttpResponseMessage accountCheck([FromBody]string nAccountName)
         {
             return toJson(AccountAspect.accountCheck(nAccountName));
         }
