@@ -16,7 +16,6 @@ namespace gameweb
         public int mServerId { get; set; }
         public string mRoleName { get; set; }
         public short mRoleRace { get; set; }
-        public short mRoleStep { get; set; }
         public bool mUpdate { get; set; }
     }
 }
