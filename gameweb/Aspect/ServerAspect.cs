@@ -99,7 +99,8 @@ namespace gameweb
                 string operatorName_ = sqlDataReader_.GetString(0).Trim();
                 int serverNo_ = sqlDataReader_.GetInt32(1);
                 string serverStart_ = sqlDataReader_.GetString(2).Trim();
-                serverInfo_.mServerStart = Convert.ToDateTime(serverStart_);
+                DateTime dateTime_ = Convert.ToDateTime(serverStart_);
+                serverInfo_.mServerStart = ToTimestamp(dateTime_);
                 if (!mServerStates.ContainsKey(operatorName_))
                 {
                     ServerState serverState_ = new ServerState();
@@ -109,6 +110,19 @@ namespace gameweb
             }
             sqlDataReader_.Close();
             sqlConnection_.Close();
+        }
+
+        static long ToTimestamp(DateTime value)
+        {
+            TimeSpan span = (value - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime());
+            return (long)span.TotalSeconds;
+        }
+
+        static DateTime ConvertTimestamp(long timestamp)
+        {
+            DateTime converted = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            DateTime newDateTime = converted.AddSeconds(timestamp);
+            return newDateTime.ToLocalTime();
         }
 
         static void initServerState(bool nReinit)

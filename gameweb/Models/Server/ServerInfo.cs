@@ -7,6 +7,6 @@ namespace gameweb
 {
     public class ServerInfo
     {
-        public DateTime mServerStart { get; set; }
+        public long mServerStart { get; set; }
     }
 }
