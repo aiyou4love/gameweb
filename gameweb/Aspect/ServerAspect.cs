@@ -98,8 +98,7 @@ namespace gameweb
                 ServerInfo serverInfo_ = new ServerInfo();
                 string operatorName_ = sqlDataReader_.GetString(0).Trim();
                 int serverNo_ = sqlDataReader_.GetInt32(1);
-                string serverStart_ = sqlDataReader_.GetString(2).Trim();
-                DateTime dateTime_ = Convert.ToDateTime(serverStart_);
+                DateTime dateTime_ = sqlDataReader_.GetDateTime(2);
                 serverInfo_.mServerStart = ToTimestamp(dateTime_);
                 if (!mServerStates.ContainsKey(operatorName_))
                 {
