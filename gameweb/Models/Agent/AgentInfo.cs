@@ -8,7 +8,7 @@ namespace gameweb
     public class AgentInfo
     {
         public string mAgentIp { get; set; }
-        public int mAgentPort { get; set; }
+        public string mAgentPort { get; set; }
         public int mPlayerMax { get; set; }
         public int mPlayerCount { get; set; }
     }

@@ -9,7 +9,7 @@ namespace gameweb
     {
         public int mErrorCode { get; set; }
         public string mAgentIp { get; set; }
-        public int mAgentPort { get; set; }
+        public string mAgentPort { get; set; }
         public ServerInfo mServerInfo { get; set; }
     }
 }

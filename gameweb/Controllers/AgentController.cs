@@ -20,7 +20,7 @@ namespace gameweb.Controllers
             AgentResult agentResult_ = new AgentResult();
             agentResult_.mErrorCode = ConstAspect.mFail;
             agentResult_.mAgentIp = "";
-            agentResult_.mAgentPort = 0; 
+            agentResult_.mAgentPort = ""; 
 
             AgentInfo agentInfo_ = AgentAspect.getIdleAgent(nAgentRequest.mOperatorName, nAgentRequest.mVersionNo);
             if (null == agentInfo_)

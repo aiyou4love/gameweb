@@ -43,7 +43,7 @@ namespace gameweb
                 string operatorName_ = sqlDataReader_.GetString(0).Trim();
                 int agentId_ = sqlDataReader_.GetInt32(1);
                 agentInfo_.mAgentIp = sqlDataReader_.GetString(2).Trim();
-                agentInfo_.mAgentPort = sqlDataReader_.GetInt32(3);
+                agentInfo_.mAgentPort = sqlDataReader_.GetString(3).Trim();
                 agentInfo_.mPlayerMax = sqlDataReader_.GetInt32(4);
                 agentInfo_.mPlayerCount = sqlDataReader_.GetInt32(5);
                 if (!mAgentStates.ContainsKey(operatorName_))
