@@ -162,6 +162,7 @@
     <Compile Include="Aspect\OperatorAspect.cs" />
     <Compile Include="Aspect\RoleAspect.cs" />
     <Compile Include="Aspect\ServerAspect.cs" />
+    <Compile Include="Aspect\SocialAspect.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AgentController.cs" />
     <Compile Include="Controllers\AutoupController.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Models\Server\ServerInfo.cs" />
     <Compile Include="Models\Server\ServerItem.cs" />
     <Compile Include="Models\Server\ServerState.cs" />
+    <Compile Include="Models\Social\SocialInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
