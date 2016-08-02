@@ -11,5 +11,6 @@ namespace gameweb
         public string mAgentPort { get; set; }
         public int mPlayerMax { get; set; }
         public int mPlayerCount { get; set; }
+        public string mSerialNo { get; set; }
     }
 }

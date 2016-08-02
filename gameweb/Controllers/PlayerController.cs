@@ -17,27 +17,28 @@ namespace gameweb.Controllers
         [HttpPost]
         public HttpResponseMessage createRole([FromBody]RoleRequest nRoleRequest)
         {
-            long accountId_ = AccountAspect.getAccountId(nRoleRequest.mAccountName, nRoleRequest.mPassword, nRoleRequest.mAccountType);
+            AccountInfo accountInfo_ = AccountAspect.getAccountId(nRoleRequest.mAccountName, nRoleRequest.mPassword, nRoleRequest.mAccountType);
             RoleResult roleResult_ = new RoleResult();
             roleResult_.mErrorCode = ConstAspect.mFail;
-            roleResult_.mAccountId = accountId_;
+            roleResult_.mAccountId = 0;
             roleResult_.mRoleItem = null;
             roleResult_.mServerItem = null;
-            if ((0 == accountId_) || (nRoleRequest.mAccountId != accountId_))
+            if ((null == accountInfo_) || (0 == accountInfo_.mAccountId) || (nRoleRequest.mAccountId != accountInfo_.mAccountId))
             {
                 roleResult_.mErrorCode = ConstAspect.mAccount;
                 return toJson(roleResult_);
             }
-            int roleCount_ = RoleAspect.getRoleCount(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, accountId_, nRoleRequest.mServerId);
+            roleResult_.mAccountId = accountInfo_.mAccountId;
+            int roleCount_ = RoleAspect.getRoleCount(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, accountInfo_.mAccountId, nRoleRequest.mServerId);
             if (roleCount_ > 0)
             {
                 roleResult_.mErrorCode = ConstAspect.mRole;
                 return toJson(roleResult_);
             }
-            if (RoleAspect.createRole(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, accountId_, nRoleRequest.mServerId, nRoleRequest.mRoleName, nRoleRequest.mRoleRace))
+            if (RoleAspect.createRole(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, accountInfo_.mAccountId, nRoleRequest.mServerId, nRoleRequest.mRoleName, nRoleRequest.mRoleRace))
             {
                 roleResult_.mErrorCode = ConstAspect.mSucess;
-                roleResult_.mAccountId = accountId_;
+                roleResult_.mAccountId = accountInfo_.mAccountId;
                 roleResult_.mRoleItem = new RoleItem();
                 roleResult_.mRoleItem.mRoleId = nRoleRequest.mServerId;
                 roleResult_.mRoleItem.mServerId = nRoleRequest.mServerId;
@@ -54,11 +55,11 @@ namespace gameweb.Controllers
             }
             if (nRoleRequest.mUpdate)
             {
-                RoleAspect.updateRoleStart(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, accountId_, nRoleRequest.mServerId, nRoleRequest.mServerId);
+                RoleAspect.updateRoleStart(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, accountInfo_.mAccountId, nRoleRequest.mServerId, nRoleRequest.mServerId);
             }
             else
             {
-                RoleAspect.insertRoleStart(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, accountId_, nRoleRequest.mServerId, nRoleRequest.mServerId);
+                RoleAspect.insertRoleStart(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, accountInfo_.mAccountId, nRoleRequest.mServerId, nRoleRequest.mServerId);
             }
             return toJson(nRoleRequest);
         }

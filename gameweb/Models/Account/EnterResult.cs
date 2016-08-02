@@ -10,6 +10,7 @@ namespace gameweb
         public int mSessionId { get; set; }
         public int mErrorCode { get; set; }
         public long mAccountId { get; set; }
+        public short mAuthority { get; set; }
         public RoleItem mRoleItem { get; set; }
     }
 }

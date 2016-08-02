@@ -19,7 +19,7 @@ namespace gameweb
             return mAgentStates[operatorName_].getIdleAgent();
         }
 
-        static string mInitAgent = "SELECT operatorName,agentId,agentIp,agentPort,playerMax,playerCount FROM t_agentList";
+        static string mInitAgent = "SELECT operatorName,agentId,agentIp,agentPort,playerMax,playerCount,serialNo FROM t_agentList";
         public static void initAgent(bool nReinit)
         {
             if (!nReinit)
@@ -46,6 +46,7 @@ namespace gameweb
                 agentInfo_.mAgentPort = sqlDataReader_.GetString(3).Trim();
                 agentInfo_.mPlayerMax = sqlDataReader_.GetInt32(4);
                 agentInfo_.mPlayerCount = sqlDataReader_.GetInt32(5);
+                agentInfo_.mSerialNo = sqlDataReader_.GetString(6).Trim();
                 if (!mAgentStates.ContainsKey(operatorName_))
                 {
                     AgentState agentState_ = new AgentState();

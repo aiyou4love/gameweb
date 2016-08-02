@@ -18,17 +18,9 @@ namespace gameweb.Controllers
         [HttpGet]
         public HttpResponseMessage lastUpdate(string nOperatorName, int nVersionNo)
         {
-            string operatorName_ = OperatorAspect.getOperator(nOperatorName, nVersionNo);
-
             UpdateResult updateResult_ = new UpdateResult();
             updateResult_.mErrorCode = ConstAspect.mFail;
             updateResult_.mUpdateItems = null;
-
-            if ("" == operatorName_)
-            {
-                updateResult_.mErrorCode = ConstAspect.mOperator;
-                return toJson(updateResult_);
-            }
 
             SqlConnection sqlConnection_ = new SqlConnection();
 
@@ -38,7 +30,7 @@ namespace gameweb.Controllers
             SqlCommand sqlCommand_ = new SqlCommand();
             sqlCommand_.Connection = sqlConnection_;
             sqlCommand_.CommandType = CommandType.Text;
-            sqlCommand_.CommandText = string.Format(mLastUpdate, operatorName_);
+            sqlCommand_.CommandText = string.Format(mLastUpdate, nOperatorName);
             SqlDataReader sqlDataReader_ = sqlCommand_.ExecuteReader();
             while (sqlDataReader_.Read())
             {

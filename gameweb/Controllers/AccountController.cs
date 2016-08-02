@@ -17,17 +17,20 @@ namespace gameweb.Controllers
         [HttpPost]
         public HttpResponseMessage accountEnter([FromBody]EnterRequest nEnterRequest)
         {
-            long accountId_ = AccountAspect.getAccountId(nEnterRequest.mAccountName, nEnterRequest.mPassword, nEnterRequest.mAccountType);
+            AccountInfo accountInfo_ = AccountAspect.getAccountId(nEnterRequest.mAccountName, nEnterRequest.mPassword, nEnterRequest.mAccountType);
             EnterResult enterResult_ = new EnterResult();
             enterResult_.mSessionId = nEnterRequest.mSessionId;
             enterResult_.mErrorCode = ConstAspect.mFail;
-            enterResult_.mAccountId = accountId_;
+            enterResult_.mAccountId = 0;
+            enterResult_.mAuthority = 0;
             enterResult_.mRoleItem = null;
-            if ( (accountId_ <= 0) || (accountId_ != nEnterRequest.mAccountId) )
+            if ( (null == accountInfo_) || (accountInfo_.mAccountId <= 0) || (accountInfo_.mAccountId != nEnterRequest.mAccountId) )
             {
                 enterResult_.mErrorCode = ConstAspect.mAccount;
                 return toJson(enterResult_);
             }
+            enterResult_.mAccountId = accountInfo_.mAccountId;
+            enterResult_.mAuthority = accountInfo_.mAuthority;
             RoleItem roleItem_ = RoleAspect.getRoleInfo(nEnterRequest.mOperatorName, nEnterRequest.mVersionNo, nEnterRequest.mAccountId, nEnterRequest.mRoleId, nEnterRequest.mServerId);
             if (null == roleItem_)
             {
@@ -49,18 +52,21 @@ namespace gameweb.Controllers
         [HttpPost]
         public HttpResponseMessage accountLogin([FromBody]LoginRequest nLoginRequest)
         {
-            long accountId_ = AccountAspect.getAccountId(nLoginRequest.mAccountName, nLoginRequest.mPassword, nLoginRequest.mAccountType);
+            AccountInfo accountInfo_ = AccountAspect.getAccountId(nLoginRequest.mAccountName, nLoginRequest.mPassword, nLoginRequest.mAccountType);
             LoginResult loginResult_ = new LoginResult();
-            loginResult_.mAccountId = accountId_;
+            loginResult_.mAccountId = 0;
+            loginResult_.mAuthority = 0;
             loginResult_.mRoleItem = null;
             loginResult_.mServerItem = null;
-            if (accountId_ > 0)
+            if ( (null != accountInfo_) && (accountInfo_.mAccountId > 0) )
             {
+                loginResult_.mAccountId = accountInfo_.mAccountId;
+                loginResult_.mAuthority = accountInfo_.mAuthority;
                 int serverId_ = 0;
-                RoleStart roleStart_ = RoleAspect.getRoleStart(nLoginRequest.mOperatorName, nLoginRequest.mVersionNo, accountId_);
+                RoleStart roleStart_ = RoleAspect.getRoleStart(nLoginRequest.mOperatorName, nLoginRequest.mVersionNo, accountInfo_.mAccountId);
                 if (null != roleStart_)
                 {
-                    loginResult_.mRoleItem = RoleAspect.getRoleInfo(nLoginRequest.mOperatorName, nLoginRequest.mVersionNo, accountId_, roleStart_.mRoleId, roleStart_.mServerId);
+                    loginResult_.mRoleItem = RoleAspect.getRoleInfo(nLoginRequest.mOperatorName, nLoginRequest.mVersionNo, accountInfo_.mAccountId, roleStart_.mRoleId, roleStart_.mServerId);
                     serverId_ = roleStart_.mServerId;
                 }
                 else

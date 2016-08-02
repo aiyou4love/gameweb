@@ -56,7 +56,7 @@ namespace gameweb
             sqlConnection_.Close();
             return (1 == value_);
         }
-        public static long getAccountId(string nAccountName, string nPassword, short nAccountType)
+        public static AccountInfo getAccountId(string nAccountName, string nPassword, short nAccountType)
         {
             if (1 == nAccountType)
             {
@@ -64,20 +64,20 @@ namespace gameweb
             }
             if (!validAccount(nAccountName, nPassword, nAccountType))
             {
-                return 0;
+                return null;
             }
-            long accountId_ = getGameAccount(nAccountName, nPassword, nAccountType);
+            AccountInfo accountInfo_ = getGameAccount(nAccountName, nPassword, nAccountType);
 
-            if (accountId_ > 0) return accountId_;
+            if (accountInfo_.mAccountId > 0) return accountInfo_;
 
             if (accountRegister(nAccountName, "3SVkxs8b0Bj4kgqo", nAccountType))
             {
                 return getGameAccount(nAccountName, nPassword, nAccountType);
             }
-            return 0;
+            return null;
         }
-        static string mGameAccount = "SELECT accountId,accountPassword FROM t_accountTb WHERE accountName='{0}' AND accountType='{1}';";
-        public static long getGameAccount(string nAccountName, string nPassword, short nAccountType)
+        static string mGameAccount = "SELECT accountId,accountPassword,accountAuthority FROM t_accountTb WHERE accountName='{0}' AND accountType='{1}';";
+        public static AccountInfo getGameAccount(string nAccountName, string nPassword, short nAccountType)
         {
             SqlConnection sqlConnection_ = new SqlConnection();
 
@@ -89,12 +89,13 @@ namespace gameweb
             sqlCommand_.CommandType = CommandType.Text;
             sqlCommand_.CommandText = string.Format(mGameAccount, nAccountName, nAccountType);
             SqlDataReader sqlDataReader_ = sqlCommand_.ExecuteReader();
-            long accountId_ = 0;
+            AccountInfo accountInfo_ = new AccountInfo();
             string password_ = "";
             if (sqlDataReader_.Read())
             {
-                accountId_ = sqlDataReader_.GetInt64(0);
+                accountInfo_.mAccountId = sqlDataReader_.GetInt64(0);
                 password_ = sqlDataReader_.GetString(1).Trim();
+                accountInfo_.mAuthority = sqlDataReader_.GetInt16(2);
             }
             sqlDataReader_.Close();
             sqlConnection_.Close();
@@ -103,10 +104,11 @@ namespace gameweb
             {
                 if (("" == password_) || (nPassword != password_))
                 {
-                    accountId_ = 0;
+                    accountInfo_.mAccountId = 0;
+                    accountInfo_.mAuthority = 0;
                 }
             }
-            return accountId_;
+            return accountInfo_;
         }
         public static bool validAccount(string nAccountName, string nPassword, short nAccountType)
         {

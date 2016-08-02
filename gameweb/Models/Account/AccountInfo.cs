@@ -5,11 +5,9 @@ using System.Web;
 
 namespace gameweb
 {
-    public class LoginResult
+    public class AccountInfo
     {
         public long mAccountId { get; set; }
         public short mAuthority { get; set; }
-        public RoleItem mRoleItem { get; set; }
-        public ServerItem mServerItem { get; set; }
     }
 }
