@@ -102,7 +102,7 @@ namespace gameweb.Controllers
         }
 
         //http://localhost:8313/api/account/accountCheck
-        [HttpGet]
+        [HttpPost]
         public HttpResponseMessage accountCheck([FromBody]string nAccountName)
         {
             return toJson(AccountAspect.accountCheck(nAccountName));
