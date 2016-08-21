@@ -9,7 +9,7 @@ namespace gameweb
 {
     public class AccountAspect
     {
-        static string mAccountRegister = @"INSERT INTO t_accountTb(accountName,accountPassword,accountType)VALUES('{0}','{1}','{2}');";
+        static string mAccountRegister = @"INSERT INTO t_accountTb(accountName,accountPassword,accountType,accountAuthority)VALUES('{0}','{1}','{2}','1');";
         public static bool accountRegister(string nAccountName, string nAccountPassword, short nAccountType)
         {
             SqlConnection sqlConnection_ = new SqlConnection();
