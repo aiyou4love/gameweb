@@ -61,7 +61,7 @@ namespace gameweb.Controllers
             {
                 RoleAspect.insertRoleStart(nRoleRequest.mOperatorName, nRoleRequest.mVersionNo, accountInfo_.mAccountId, nRoleRequest.mServerId, nRoleRequest.mServerId);
             }
-            return toJson(nRoleRequest);
+            return toJson(roleResult_);
         }
 
         HttpResponseMessage toJson(Object nObject)
